@@ -1,7 +1,18 @@
 import React from "react";
 
-const Legacy = () => {
-  return <div>Legacy</div>;
+interface LegacyProps {
+  prop1: string;
+  sssss?: number;
+}
+
+const Legacy = ({ prop1, sssss }: LegacyProps) => {
+  return (
+    <div>
+      Legacy
+      {prop1}
+      {sssss}
+    </div>
+  );
 };
 
 export default Legacy;

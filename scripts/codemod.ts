@@ -32,7 +32,7 @@ files.forEach((file) => {
     }
   });
 
-  // file.saveSync();
+  file.saveSync();
   // console.log(
   //   file.getImportDeclaration((condition: any) => {
   //     console.log(1);

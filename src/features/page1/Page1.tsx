@@ -4,7 +4,7 @@ import React from "react";
 const Page1 = () => {
   return (
     <div>
-      <Legacy />
+      <Legacy prop1="1" sssss={3} />
     </div>
   );
 };
