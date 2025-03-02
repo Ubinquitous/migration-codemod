@@ -11,73 +11,32 @@ const NEW_IMPORT = "@/components/v3/New/New";
 
 const files: Array<SourceFile> = project.getSourceFiles("src/**");
 
-// console.log(files);
-
 files.forEach((file) => {
   const importDeclarationList = file.getImportDeclarations();
-  const DescendantSyntax = SyntaxKind.Identifier;
+  const DescendantSyntax = SyntaxKind.JsxSelfClosingElement;
   const descendantsOfKind = file.getDescendantsOfKind(DescendantSyntax);
 
   importDeclarationList.forEach((importDecl) => {
     const moduleSpecifierValue = importDecl.getModuleSpecifierValue();
     if (moduleSpecifierValue === OLD_IMPORT) {
       importDecl.setModuleSpecifier(NEW_IMPORT);
+      importDecl.setDefaultImport(NEW_COMPONENT);
+      // console.log(importDecl.getDefaultImport()?.getText());
     }
   });
 
   descendantsOfKind.forEach((descendant) => {
-    const componentName = descendant.getText();
-    if (componentName === TARGET_COMPONENT) {
-      descendant.replaceWithText(NEW_COMPONENT);
+    const component = descendant.getTagNameNode().getFullText();
+
+    if (component === TARGET_COMPONENT) {
+      descendant.getTagNameNode().replaceWithText(NEW_COMPONENT);
+      console.log(descendant.getAttribute("prop1"));
+      descendant.insertAttribute(0, { name: "prop2", initializer: "{2}" });
     }
   });
 
   file.saveSync();
-  // console.log(
-  //   file.getImportDeclaration((condition: any) => {
-  //     console.log(1);
-  //     return true;
-  //   })
-  // );
+  // TODO : props change
 });
 
 export {};
-
-// files.forEach((file: any) => {
-//   let modified = false;
-//   file.getImportDeclarations().forEach((importDecl: any) => {
-//     console.log(importDecl.getModuleSpecifierValue());
-//     if (importDecl.getModuleSpecifierValue() === OLD_IMPORT) {
-//       importDecl.getNamedImports().forEach((namedImport: any) => {
-//         if (namedImport.getName() === TARGET_COMPONENT) {
-//           namedImport.renameAlias(NEW_COMPONENT);
-//           importDecl.setModuleSpecifier(NEW_IMPORT);
-//           modified = true;
-//         }
-//       });
-//     }
-//   });
-
-//   file
-//     .getDescendantsOfKind(SyntaxKind.JsxOpeningElement)
-//     .forEach((jsxTag: any) => {
-//       if (jsxTag.getTagNameNode().getText() === TARGET_COMPONENT) {
-//         jsxTag.getTagNameNode().replaceWithText(NEW_COMPONENT);
-//         modified = true;
-//       }
-//     });
-
-//   file
-//     .getDescendantsOfKind(SyntaxKind.JsxClosingElement)
-//     .forEach((jsxTag: any) => {
-//       if (jsxTag.getTagNameNode().getText() === TARGET_COMPONENT) {
-//         jsxTag.getTagNameNode().replaceWithText(NEW_COMPONENT);
-//         modified = true;
-//       }
-//     });
-
-//   if (modified) {
-//     file.saveSync();
-//     console.log(`Updated: ${file.getFilePath()}`);
-//   }
-// });
